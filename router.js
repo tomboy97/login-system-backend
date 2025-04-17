@@ -45,6 +45,17 @@ router.post('/login' ,async(req, res) => {
     }
 });
 
+router.post('/logout', verify, async(req, res) => {
+    try{
+        const { userId } = req.user;
+        const query = `delete from users where id = $1`;
+        const result = await pool.query(query, [userId]);
+        res.status(200).send("User logged out successfully!"); 
+    } catch(e){
+        res.status(500).send("Logout Failed! " + e);
+    }
+});
+
 router.get('/protected-data', verify, (req, res) => {
     res.status(200).send("Data is sent");
 });
